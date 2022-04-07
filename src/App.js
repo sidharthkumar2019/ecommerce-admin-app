@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isUserLoggedIn } from './actions';
 import { Products } from './containers/Products';
 import { Orders } from './containers/Orders';
+import { Category } from './containers/Category';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +26,10 @@ function App() {
       <Routes>
         <Route exact path='/' element={ <PrivateRoute>
             <Home />
+          </PrivateRoute> }
+        />
+        <Route exact path='/category' element={ <PrivateRoute>
+            <Category />
           </PrivateRoute> }
         />
         <Route path='/products' element={ <PrivateRoute>

@@ -20,6 +20,7 @@ const Main = (props) => {
               <Col md={2} className='sidebar'>
                 <ul>
                   <li><NavLink href='/' to={'/'}>Home</NavLink></li>
+                  <li><NavLink href='/category' to={'/category'}>Category</NavLink></li>
                   <li><NavLink href='/products' to={'/products'}>Products</NavLink></li>
                   <li><NavLink href='/orders' to={'/orders'}>Orders</NavLink></li>
                 </ul>
