@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Row, Col } from 'reactstrap';
 import Header from './HeaderComponent.js';
 import {NavLink} from 'react-router-dom';
+import './Main.css';
 
 /**
 * @author

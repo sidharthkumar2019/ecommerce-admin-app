@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Container, Row, Button, Modal, ModalBody, ModalFooter, ModalHeader, Input } from 'reactstrap';
+import { Col, Container, Row, Button, Modal, ModalBody, ModalFooter, ModalHeader, Input, Spinner } from 'reactstrap';
 import { getAllCategories, addCategory } from '../actions/index';
 import Main from '../components/MainComponent';
 
@@ -33,6 +33,7 @@ export const Category = (props) => {
     form.append('accessToken', accessToken);
 
     dispatch(addCategory(form));
+    toggle();
   };
 
   useEffect(() => {
@@ -74,8 +75,8 @@ export const Category = (props) => {
         <Container>
           <Row>
             <Col md={12}>
-              <h2>Category</h2>
-              <Button color="primary" onClick={toggle}>Add</Button>
+              <h2 style={{display: 'inline-block'}}>Category</h2>
+              <Button color="primary" onClick={toggle} style={{display: 'inline-block', marginLeft: '50rem'}}>Add</Button>
             </Col>
           </Row>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Main from '../components/MainComponent';
-import {Form, FormGroup, Label, Input, Button, Container, Row, Col} from 'reactstrap';
+import {Form, FormGroup, Label, Input, Button, Container, Row, Col, Spinner} from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { signup } from '../actions';
@@ -30,7 +30,7 @@ const Signup = (props) => {
 
   if (auth.authenticate)  return <Navigate to={'/'} />;
 
-  if (user.loading) return <p>loading...</p>;
+  if (user.loading) return <Spinner>Loading...</Spinner>;
 
   return(
     <Main>
