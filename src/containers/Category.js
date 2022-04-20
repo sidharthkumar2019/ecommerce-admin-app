@@ -36,11 +36,6 @@ export const Category = (props) => {
     toggle();
   };
 
-  useEffect(() => {
-    dispatch(getAllCategories());
-
-  }, []);
-
   const renderCategories = (categories) => {
     let returnVal = [];
     for (let category of categories) {

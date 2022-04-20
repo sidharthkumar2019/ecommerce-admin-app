@@ -8,11 +8,24 @@ const initialState = {
 
 const buildNewCategories = (parentID, categories, category) => {
     let newCategories = [];
+
+    if (parentID == undefined) {
+        return [
+            ...categories,
+            {
+                id: category._id,
+                name: category.name,
+                slug: category.slug,
+                children: []
+            }
+        ];
+    }
+
     for (let ele of categories) {
         if (ele._id == parentID) {
             newCategories.push({
                 ...ele,
-                children: (ele.children && ele.children.length > 0) ? buildNewCategories(parentID, [...ele.children,{
+                children: ele.children ? buildNewCategories(parentID, [...ele.children,{
                     id: category._id,
                     name: category.name,
                     slug: category.slug,
