@@ -1,5 +1,4 @@
 import React from 'react';
-import { Col, Container, NavLink, Row } from 'reactstrap';
 import Main from '../components/MainComponent';
 import './style.css';
 
