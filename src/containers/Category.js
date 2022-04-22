@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row, Button, Modal, ModalBody, ModalFooter, ModalHeader, Input, Spinner } from 'reactstrap';
-import { getAllCategories, addCategory } from '../actions/index';
+import { getAllCategories, addCategory, updateCategories } from '../actions/index';
 import Main from '../components/MainComponent';
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
@@ -59,8 +59,6 @@ export const Category = (props) => {
 
     setCheckedArray(checkedArray);
     setExpandedArray(expandedArray);
-
-    console.log({ checkedArray, expandedArray });
   }
 
   const handleCategoryInput = (key, value, index, type) => {
@@ -104,46 +102,8 @@ export const Category = (props) => {
     setCategoryImage(e.target.files[0]);
   }
 
-  return (
-    <Main sidebar>
-      <Container>
-        <Row>
-          <Col md={12}>
-            <h2 style={{ display: 'inline-block' }}>Category</h2>
-            <Button color="primary" onClick={toggle} style={{ display: 'inline-block', marginLeft: '50rem' }}>Add</Button>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col md={12}>
-            {/* <ul>
-                {renderCategories(category.categories)}
-              </ul> */}
-            <CheckboxTree
-              nodes={renderCategories(category.categories)}
-              checked={checked}
-              expanded={expanded}
-              onCheck={checked => setChecked(checked)}
-              onExpand={expanded => setExpanded(expanded)}
-              icons={{
-                check: <IoCheckbox />,
-                uncheck: <IoCheckboxOutline />,
-                halfCheck: <IoCheckboxOutline />,
-                expandClose: <IoChevronDownOutline />,
-                expandOpen: <IoChevronForwardOutline />
-              }}
-            />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col>
-            <Button color="danger" style={{ display: 'inline-block', marginRight: '1rem' }}>Delete</Button>
-            <Button color="secondary" onClick={toggleUpdateCategory} style={{ display: 'inline-block' }}>Update</Button>
-          </Col>
-        </Row>
-      </Container>
-
+  const renderAddCategoryModal = () => {
+    return (
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Add new category</ModalHeader>
         <ModalBody>
@@ -169,9 +129,37 @@ export const Category = (props) => {
           <Button color="primary" onClick={handleForm}>Submit</Button>{' '}
         </ModalFooter>
       </Modal>
+    );
+  };
 
-      {/* To edit categories */}
-      <Modal isOpen={updateCategoryModal} toggle={toggleUpdateCategory} size='lg'>
+  const updateCategoriesForm = () => {
+    console.log('In update categories, ');
+    const form = new FormData();
+
+    expandedArray.forEach((item, index) => {
+      form.append('_id', item.value);
+      form.append('name', item.name);
+      form.append('parentID', item.parentID ? item.parentID : '');
+      form.append('type', item.type);
+    });
+    checkedArray.forEach((item, index) => {
+      form.append('_id', item.value);
+      form.append('name', item.name);
+      form.append('parentID', item.parentID ? item.parentID : '');
+      form.append('type', item.type); 
+    });
+    dispatch(updateCategories(form))
+    .then(result => {
+      if (result)
+        dispatch(getAllCategories());
+    });
+
+    toggleUpdateCategory();
+  }
+
+  const renderUpdateCategoriesModal = () => {
+    return (
+      < Modal isOpen={updateCategoryModal} toggle={toggleUpdateCategory} size='lg' >
         <ModalHeader toggle={toggleUpdateCategory}>Update Category</ModalHeader>
         <ModalBody>
           <Row>
@@ -217,7 +205,7 @@ export const Category = (props) => {
 
           <Row>
             <Col>
-              <h6 style={{marginTop: '5px'}}>Checked</h6>
+              <h6 style={{ marginTop: '5px' }}>Checked</h6>
             </Col>
           </Row>
 
@@ -257,9 +245,55 @@ export const Category = (props) => {
           }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleForm}>Submit</Button>{' '}
+          <Button color="primary" onClick={updateCategoriesForm}>Submit</Button>{' '}
         </ModalFooter>
-      </Modal>
+      </Modal >
+    );
+  }
+
+  return (
+    <Main sidebar>
+      <Container>
+        <Row>
+          <Col md={12}>
+            <h2 style={{ display: 'inline-block' }}>Category</h2>
+            <Button color="primary" onClick={toggle} style={{ display: 'inline-block', marginLeft: '50rem' }}>Add</Button>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col md={12}>
+            {/* <ul>
+                {renderCategories(category.categories)}
+              </ul> */}
+            <CheckboxTree
+              nodes={renderCategories(category.categories)}
+              checked={checked}
+              expanded={expanded}
+              onCheck={checked => setChecked(checked)}
+              onExpand={expanded => setExpanded(expanded)}
+              icons={{
+                check: <IoCheckbox />,
+                uncheck: <IoCheckboxOutline />,
+                halfCheck: <IoCheckboxOutline />,
+                expandClose: <IoChevronDownOutline />,
+                expandOpen: <IoChevronForwardOutline />
+              }}
+            />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <Button color="danger" style={{ display: 'inline-block', marginRight: '1rem' }}>Delete</Button>
+            <Button color="secondary" onClick={toggleUpdateCategory} style={{ display: 'inline-block' }}>Update</Button>
+          </Col>
+        </Row>
+      </Container>
+
+      {renderAddCategoryModal()}
+      {renderUpdateCategoriesModal()}
+
     </Main>
   )
 

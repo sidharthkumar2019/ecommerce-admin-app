@@ -23,15 +23,16 @@ const buildNewCategories = (parentID, categories, category) => {
 
     for (let ele of categories) {
         if (ele._id == parentID) {
+            const newCategory = {
+                id: category._id,
+                name: category.name,
+                slug: category.slug,
+                parentID: category.parentID,
+                children: []
+            };
             newCategories.push({
                 ...ele,
-                children: ele.children ? buildNewCategories(parentID, [...ele.children,{
-                    id: category._id,
-                    name: category.name,
-                    slug: category.slug,
-                    parentID: category.parentID,
-                    children: category.children
-                }], category) : []
+                children: ele.children ? [...ele.children, newCategory] : [newCategory]
             });
         }
         else {

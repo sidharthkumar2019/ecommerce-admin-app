@@ -41,8 +41,6 @@ export const addCategory = (form) => {
         })
             .catch(err => console.log(err));
 
-        console.log(res);
-
         if (res.status === 201) {
             dispatch({
                 type: categoryConstants.ADD_NEW_CATEGORY_SUCCESS,
@@ -55,5 +53,30 @@ export const addCategory = (form) => {
                 payload: res.data.error
             })
         }
+    };
+}
+
+export const updateCategories = (form) => {
+
+    return async (dispatch) => {
+
+        const res = await axios.post('/category/update', form, {
+            headers: {
+                // I am passing the Authorization header here again
+                // (already sent in ./helpers/axio.js) because sometimes
+                //  store.getState().auth.token returned null
+                // 'Authorization': `Bearer ${store.getState().auth.token}`
+            }
+        })
+            .catch(err => console.log(err));
+
+        if (res.status === 201) {
+            return true;
+        }
+        else {
+
+        }
+
+        console.log(res);
     };
 }
