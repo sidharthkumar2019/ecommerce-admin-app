@@ -262,15 +262,17 @@ export const Category = (props) => {
   }
 
   const deleteCategoryForm = () => {
-    const expandedIDArray = expandedArray.map((item, index) => ({_id: item.value}));
-    const checkedIDArray = checkedArray.map((item, index) => ({_id: item.value}));
+    const expandedIDArray = expandedArray.map((item, index) => ({ _id: item.value }));
+    const checkedIDArray = checkedArray.map((item, index) => ({ _id: item.value }));
     const finalIDArray = checkedIDArray.concat(expandedIDArray);
 
-    dispatch(deleteCategories(finalIDArray))
-    .then(result => {
-      if (result)
-        dispatch(getAllCategories());
-    });
+    if (checkedIDArray.length > 0) {
+      dispatch(deleteCategories(checkedIDArray))
+        .then(result => {
+          if (result)
+            dispatch(getAllCategories());
+        });
+    }
 
     setDeleteCategoryModal(false);
   }
