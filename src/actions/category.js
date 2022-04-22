@@ -80,3 +80,29 @@ export const updateCategories = (form) => {
         console.log(res);
     };
 }
+
+export const deleteCategories = (ids) => {
+
+    return async (dispatch) => {
+        if (ids.length == 0) return;
+
+        const res = await axios.post('/category/delete', {
+            payload: { ids }
+        }, {
+            headers: {
+                // I am passing the Authorization header here again
+                // (already sent in ./helpers/axio.js) because sometimes
+                //  store.getState().auth.token returned null
+                // 'Authorization': `Bearer ${store.getState().auth.token}`
+            }
+        })
+            .catch(err => console.log(err));
+
+        if (res.status === 200) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+}

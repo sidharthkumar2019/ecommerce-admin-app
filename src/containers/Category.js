@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row, Button, Modal, ModalBody, ModalFooter, ModalHeader, Input, Spinner } from 'reactstrap';
-import { getAllCategories, addCategory, updateCategories } from '../actions/index';
+import { getAllCategories, addCategory, updateCategories, deleteCategories } from '../actions/index';
 import Main from '../components/MainComponent';
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
@@ -25,6 +25,7 @@ export const Category = (props) => {
   const [checkedArray, setCheckedArray] = useState([]);
   const [expandedArray, setExpandedArray] = useState([]);
   const [updateCategoryModal, setUpdateCategoryModal] = useState(false);
+  const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
 
   const toggle = () => {
     setModal(!modal);
@@ -42,8 +43,7 @@ export const Category = (props) => {
     toggle();
   };
 
-  const toggleUpdateCategory = () => {
-    setUpdateCategoryModal(!updateCategoryModal);
+  const updateCheckedAndExpandedCategories = () => {
     const categories = createCategoryList(category.categories);
     const checkedArray = [];
     const expandedArray = [];
@@ -59,6 +59,11 @@ export const Category = (props) => {
 
     setCheckedArray(checkedArray);
     setExpandedArray(expandedArray);
+  };
+
+  const toggleUpdateCategory = () => {
+    updateCheckedAndExpandedCategories();
+    setUpdateCategoryModal(!updateCategoryModal);
   }
 
   const handleCategoryInput = (key, value, index, type) => {
@@ -146,13 +151,13 @@ export const Category = (props) => {
       form.append('_id', item.value);
       form.append('name', item.name);
       form.append('parentID', item.parentID ? item.parentID : '');
-      form.append('type', item.type); 
+      form.append('type', item.type);
     });
     dispatch(updateCategories(form))
-    .then(result => {
-      if (result)
-        dispatch(getAllCategories());
-    });
+      .then(result => {
+        if (result)
+          dispatch(getAllCategories());
+      });
 
     toggleUpdateCategory();
   }
@@ -251,6 +256,44 @@ export const Category = (props) => {
     );
   }
 
+  const toggleDeleteCategory = () => {
+    updateCheckedAndExpandedCategories();
+    setDeleteCategoryModal(!deleteCategoryModal);
+  }
+
+  const deleteCategoryForm = () => {
+    const expandedIDArray = expandedArray.map((item, index) => ({_id: item.value}));
+    const checkedIDArray = checkedArray.map((item, index) => ({_id: item.value}));
+    const finalIDArray = checkedIDArray.concat(expandedIDArray);
+
+    dispatch(deleteCategories(finalIDArray))
+    .then(result => {
+      if (result)
+        dispatch(getAllCategories());
+    });
+
+    setDeleteCategoryModal(false);
+  }
+
+  const renderDeleteCategoryModal = () => {
+    return (
+      <Modal isOpen={deleteCategoryModal} toggle={toggleDeleteCategory}>
+        <ModalHeader toggle={toggleDeleteCategory}>Confirm</ModalHeader>
+        <ModalBody>
+          <h5>Expanded</h5>
+          {expandedArray.map((item, index) => <span key={index}>{item.name}</span>)}
+
+          <h5>Checked</h5>
+          {checkedArray.map((item, index) => <span key={index}>{item.name}</span>)}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={deleteCategoryForm}>Yes</Button>{' '}
+          <Button color="primary" onClick={toggleDeleteCategory}>No</Button>{' '}
+        </ModalFooter>
+      </Modal>
+    );
+  }
+
   return (
     <Main sidebar>
       <Container>
@@ -263,9 +306,6 @@ export const Category = (props) => {
 
         <Row>
           <Col md={12}>
-            {/* <ul>
-                {renderCategories(category.categories)}
-              </ul> */}
             <CheckboxTree
               nodes={renderCategories(category.categories)}
               checked={checked}
@@ -284,8 +324,8 @@ export const Category = (props) => {
         </Row>
 
         <Row>
-          <Col>
-            <Button color="danger" style={{ display: 'inline-block', marginRight: '1rem' }}>Delete</Button>
+          <Col className='mt-2'>
+            <Button color="danger" onClick={toggleDeleteCategory} style={{ display: 'inline-block', marginRight: '1rem' }}>Delete</Button>
             <Button color="secondary" onClick={toggleUpdateCategory} style={{ display: 'inline-block' }}>Update</Button>
           </Col>
         </Row>
@@ -293,7 +333,7 @@ export const Category = (props) => {
 
       {renderAddCategoryModal()}
       {renderUpdateCategoriesModal()}
-
+      {renderDeleteCategoryModal()}
     </Main>
   )
 
