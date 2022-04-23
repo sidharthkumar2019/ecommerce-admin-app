@@ -2,7 +2,7 @@ import axios from '../helpers/axios';
 import { categoryConstants } from './constants';
 import store from '../store/index';
 
-export const getAllCategories = () => {
+const getAllCategories = () => {
     return async dispatch => {
         dispatch({ type: categoryConstants.GET_ALL_CATEGORIES_REQUEST });
         const res = await axios.get(`category/getcategory`);
@@ -59,7 +59,7 @@ export const addCategory = (form) => {
 export const updateCategories = (form) => {
 
     return async (dispatch) => {
-
+        dispatch({type: categoryConstants.UPDATE_CATEGORIES_REQUEST});
         const res = await axios.post('/category/update', form, {
             headers: {
                 // I am passing the Authorization header here again
@@ -71,10 +71,15 @@ export const updateCategories = (form) => {
             .catch(err => console.log(err));
 
         if (res.status === 201) {
-            return true;
+            dispatch({type: categoryConstants.UPDATE_CATEGORIES_SUCCESS})
+            dispatch(getAllCategories());
         }
         else {
-
+            const {error} = res;
+            dispatch({
+                type: categoryConstants.UPDATE_CATEGORIES_FAILURE,
+                payload: {error}
+            })
         }
 
         console.log(res);
@@ -102,7 +107,10 @@ export const deleteCategories = (ids) => {
             return true;
         }
         else {
-            return false;
         }
     };
 }
+
+export {
+    getAllCategories
+};

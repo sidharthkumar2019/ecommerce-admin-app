@@ -153,12 +153,7 @@ export const Category = (props) => {
       form.append('parentID', item.parentID ? item.parentID : '');
       form.append('type', item.type);
     });
-    dispatch(updateCategories(form))
-      .then(result => {
-        if (result)
-          dispatch(getAllCategories());
-      });
-
+    dispatch(updateCategories(form));
     toggleUpdateCategory();
   }
 
@@ -300,9 +295,10 @@ export const Category = (props) => {
     <Main sidebar>
       <Container>
         <Row>
-          <Col md={12}>
-            <h2 style={{ display: 'inline-block' }}>Category</h2>
-            <Button color="primary" onClick={toggle} style={{ display: 'inline-block', marginLeft: '50rem' }}>Add</Button>
+          <Col className='mt-2'>
+            <Button color="primary" onClick={toggle} style={{ display: 'inline-block', marginRight: '5px' }}>Add</Button>
+            <Button color="secondary" onClick={toggleUpdateCategory} style={{ display: 'inline-block', marginRight: '5px' }}>Update</Button>
+            <Button color="danger" onClick={toggleDeleteCategory} style={{ display: 'inline-block', marginRight: '5px' }}>Delete</Button>
           </Col>
         </Row>
 
@@ -322,13 +318,6 @@ export const Category = (props) => {
                 expandOpen: <IoChevronForwardOutline />
               }}
             />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col className='mt-2'>
-            <Button color="danger" onClick={toggleDeleteCategory} style={{ display: 'inline-block', marginRight: '1rem' }}>Delete</Button>
-            <Button color="secondary" onClick={toggleUpdateCategory} style={{ display: 'inline-block' }}>Update</Button>
           </Col>
         </Row>
       </Container>
