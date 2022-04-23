@@ -11,6 +11,7 @@ import { Products } from './containers/Products';
 import { Orders } from './containers/Orders';
 import { Category } from './containers/Category';
 import {getAllCategories} from './actions/category';
+import { NewPage } from './containers/NewPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function App() {
             <Home />
           </PrivateRoute> }
         />
-        <Route exact path='/category' element={ <PrivateRoute>
+        <Route path='/category' element={ <PrivateRoute>
             <Category />
           </PrivateRoute> }
         />
@@ -38,12 +39,13 @@ function App() {
             <Products />
           </PrivateRoute> }
         />
-        <Route exact path='/orders' element={ <PrivateRoute>
+        <Route path='/orders' element={ <PrivateRoute>
             <Orders />
           </PrivateRoute> }
         />
-        <Route exact path='/signin' element={ <Signin /> } />
-        <Route exact path='/signup' element={ <Signup /> } />
+        <Route path='/signin' element={ <Signin /> } />
+        <Route path='/signup' element={ <Signup /> } />
+        <Route path='/page' element={ <NewPage /> } />
       </Routes>
 
     </div>

@@ -10,7 +10,6 @@ const getAllCategories = () => {
         if (res.status === 200) {
 
             const { categoryList } = res.data;
-
             dispatch({
                 type: categoryConstants.GET_ALL_CATEGORIES_SUCCESS,
                 payload: { categories: categoryList }
@@ -75,10 +74,9 @@ export const updateCategories = (form) => {
             dispatch(getAllCategories());
         }
         else {
-            const {error} = res;
             dispatch({
                 type: categoryConstants.UPDATE_CATEGORIES_FAILURE,
-                payload: {error}
+                payload: {error: res.data.error}
             })
         }
 
@@ -91,6 +89,7 @@ export const deleteCategories = (ids) => {
     return async (dispatch) => {
         if (ids.length == 0) return;
 
+        dispatch({type: categoryConstants.DELETE_CATEGORIES_REQUEST});
         const res = await axios.post('/category/delete', {
             payload: { ids }
         }, {
@@ -104,9 +103,14 @@ export const deleteCategories = (ids) => {
             .catch(err => console.log(err));
 
         if (res.status === 200) {
-            return true;
+            dispatch(getAllCategories());
+            dispatch({type: categoryConstants.DELETE_CATEGORIES_SUCCESS});
         }
         else {
+            dispatch({
+                type: categoryConstants.DELETE_CATEGORIES_FAILURE,
+                payload: {error: res.data.error}
+            })
         }
     };
 }

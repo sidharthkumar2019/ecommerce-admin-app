@@ -16,6 +16,5 @@ export const getInitialData = () => {
             });
         }
         
-        console.log(res)
     }
 }

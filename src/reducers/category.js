@@ -46,8 +46,8 @@ const buildNewCategories = (parentID, categories, category) => {
     return newCategories;
 }
 
-export default (state=initialState, action) => {
-    switch(action.type) {
+export default (state = initialState, action) => {
+    switch (action.type) {
         case categoryConstants.GET_ALL_CATEGORIES_SUCCESS:
             state = {
                 ...state,
@@ -72,7 +72,7 @@ export default (state=initialState, action) => {
                 loading: false
             }
             break;
-        case categoryConstants.ADD_NEW_CATEGORY_FAILURE: 
+        case categoryConstants.ADD_NEW_CATEGORY_FAILURE:
             state = {
                 ...initialState
             }
@@ -92,8 +92,29 @@ export default (state=initialState, action) => {
             break;
         case categoryConstants.UPDATE_CATEGORIES_FAILURE:
             state = {
-               ...state,
-               error: action.payload.error 
+                ...state,
+                loading: false,
+                error: action.payload.error
+            }
+            break;
+
+        case categoryConstants.DELETE_CATEGORIES_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+            break;
+        case categoryConstants.DELETE_CATEGORIES_SUCCESS:
+            state = {
+                ...state,
+                loading: false
+            }
+            break;
+        case categoryConstants.DELETE_CATEGORIES_FAILURE:
+            state = {
+                ...state,
+                loading: false,
+                error: action.payload.error
             }
             break;
     }

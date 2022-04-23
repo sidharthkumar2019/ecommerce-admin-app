@@ -94,7 +94,12 @@ export const Category = (props) => {
 
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
-      options.push({ value: category._id, name: category.name, parentID: category.parentID });
+      options.push({ 
+        value: category._id, 
+        name: category.name, 
+        parentID: category.parentID,
+        type: category.type,
+      });
       if (category.children.length > 0) {
         createCategoryList(category.children, options);
       }
@@ -138,7 +143,6 @@ export const Category = (props) => {
   };
 
   const updateCategoriesForm = () => {
-    console.log('In update categories, ');
     const form = new FormData();
 
     expandedArray.forEach((item, index) => {
@@ -191,7 +195,10 @@ export const Category = (props) => {
                     </select>
                   </Col>
                   <Col>
-                    <select className='form-control'>
+                    <select className='form-control' 
+                      value={item.type}
+                      onChange={(e) => handleCategoryInput('type', e.target.value, index, 'expanded')}
+                    >
                       <option value=''>select type</option>
                       <option value='page'>Page</option>
                       <option value='store'>Store</option>
@@ -232,7 +239,10 @@ export const Category = (props) => {
                     </select>
                   </Col>
                   <Col>
-                    <select className='form-control'>
+                    <select className='form-control'
+                      value={item.type}
+                      onChange={(e) => handleCategoryInput('type', e.target.value, index, 'checked')}
+                    >
                       <option value=''>select type</option>
                       <option value='page'>Page</option>
                       <option value='store'>Store</option>
@@ -262,11 +272,7 @@ export const Category = (props) => {
     const finalIDArray = checkedIDArray.concat(expandedIDArray);
 
     if (checkedIDArray.length > 0) {
-      dispatch(deleteCategories(checkedIDArray))
-        .then(result => {
-          if (result)
-            dispatch(getAllCategories());
-        });
+      dispatch(deleteCategories(checkedIDArray));
     }
 
     setDeleteCategoryModal(false);
