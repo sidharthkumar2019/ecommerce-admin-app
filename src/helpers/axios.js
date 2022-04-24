@@ -20,10 +20,11 @@ axiosInstance.interceptors.request.use((req) => {
 axiosInstance.interceptors.response.use((res) => {
     return res;
 }, (error) => {
-    const {status} = error.response;
-    if (status === 500) {
+    console.log('error: ', error);
+    const status = error.response ? error.response.status : 500;
+    if (status && status === 500) {
         localStorage.clear();
-        store.dispatch(authConstants.LOGOUT_REQUEST);
+        store.dispatch({type: authConstants.LOGOUT_REQUEST});
     }
     return Promise.reject(error);
 });
