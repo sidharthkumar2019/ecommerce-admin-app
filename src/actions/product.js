@@ -8,7 +8,7 @@ export const addProduct = (form) => {
                 // I am passing the Authorization header here again
                 // (already sent in ./helpers/axio.js) because sometimes
                 //  store.getState().auth.token returned null
-                'Authorization': `Bearer ${store.getState().auth.token}`
+                // 'Authorization': `Bearer ${store.getState().auth.token}`
             }
         })
         .catch(err => console.log(err));

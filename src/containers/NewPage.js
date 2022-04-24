@@ -150,7 +150,7 @@ export const NewPage = (props) => {
                     </Row>
 
                     {
-                        products.length > 0 ?
+                         products.length > 0 ?
                             products.map((product, index) => {
                                 return (
                                     <Row key={index}>
