@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Main from '../components/MainComponent'
 import { Col, Container, Row, Button, Modal, ModalBody, ModalFooter, ModalHeader, Input, Spinner, Label, FormGroup, Form, Table } from 'reactstrap';
-import { addProduct } from '../actions/product';
+import { addProduct, deleteProductByID } from '../actions/product';
 import './style.css';
 import { generatePublicUrl } from '../urlConfig';
 
@@ -91,12 +91,25 @@ export const Products = (props) => {
           {
             product.products.length > 0 ? 
             product.products.map((ele, index) =>
-              <tr onClick={ () => showProductDetailsModal(ele)} key={ele._id}>
+              <tr key={ele._id}>
                 <th scope="row">{index+1}</th>
                 <td>{ele.name}</td>
                 <td>{ele.price}</td>
                 <td>{ele.quantity}</td>
                 <td>{ele.category.name}</td>
+                <td>
+                  <Button color='secondary' onClick={() => showProductDetailsModal(ele)}>
+                    info
+                  </Button>
+                  <Button color='danger' onClick={() => {
+                    const payload = {
+                      productID: ele._id
+                    };
+                    dispatch(deleteProductByID(payload));
+                  }}>
+                    delete
+                  </Button>
+                </td>
               </tr>
             ) :
             null

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Main from '../components/MainComponent';
 import {Form, FormGroup, Label, Input, Button, Container, Row, Col, Spinner} from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +19,15 @@ const Signup = (props) => {
   const auth = useSelector(state => state.auth);
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!user.loading) {
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+    }
+  }, [user.loading]);
 
   const userSignUp = (e) => {
     e.preventDefault();

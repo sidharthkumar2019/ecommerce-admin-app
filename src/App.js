@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getInitialData, isUserLoggedIn } from './actions';
 import { Products } from './containers/Products';
-import { Orders } from './containers/Orders';
+import { Order } from './containers/Order';
 import { Category } from './containers/Category';
 import {getAllCategories} from './actions/category';
 import { NewPage } from './containers/NewPage';
@@ -42,7 +42,7 @@ function App() {
           </PrivateRoute> }
         />
         <Route path='/orders' element={ <PrivateRoute>
-            <Orders />
+            <Order />
           </PrivateRoute> }
         />
         <Route path='/signin' element={ <Signin /> } />
